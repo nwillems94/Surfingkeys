@@ -49,7 +49,6 @@ function modifyManifest(browser, mode, buffer) {
                     "pages/neovim.html",
                     "pages/default.js",
                     "pages/emoji.tsv",
-                    "pages/l10n.json",
                     "pages/frontend.html",
                     "pages/pdf_viewer.html",
                     "pages/pdf_viewer.css",

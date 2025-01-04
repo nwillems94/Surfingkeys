@@ -604,27 +604,9 @@ DOMRect.prototype.has = function (x, y, ex, ey) {
 };
 
 function initL10n(cb) {
-    const lang = runtime.conf.language || window.navigator.language;
-    if (lang === "en-US") {
-        cb(function(str) {
-            return str;
-        });
-    } else {
-        fetch(chrome.runtime.getURL("pages/l10n.json")).then(function(res) {
-            return res.json();
-        }).then(function(l10n) {
-            if (typeof(l10n[lang]) === "object") {
-                l10n = l10n[lang];
-                cb(function(str) {
-                    return l10n[str] ? l10n[str] : str;
-                });
-            } else {
-                cb(function(str) {
-                    return str;
-                });
-            }
-        });
-    }
+    cb(function(str) {
+        return str;
+    });
 }
 
 String.prototype.format = function() {
