@@ -50,9 +50,6 @@ function modifyManifest(browser, mode, buffer) {
                     "pages/default.js",
                     "pages/emoji.tsv",
                     "pages/frontend.html",
-                    "pages/pdf_viewer.html",
-                    "pages/pdf_viewer.css",
-                    "pages/pdf_viewer.mjs",
                     "pages/shadow.css",
                     "pages/default.css"
                 ],
@@ -93,7 +90,6 @@ module.exports = (env, argv) => {
     const pagesCopyOptions = {
         ignore: [
             '**/neovim.*',
-            '**/pdf_viewer.html',
         ]
     };
     if (browser === "chrome") {
@@ -133,9 +129,6 @@ module.exports = (env, argv) => {
                     { from: 'src/content_scripts/ui/frontend.html', to: 'pages' },
                     { from: 'src/content_scripts/ui/frontend.css', to: 'pages' },
                     { from: 'node_modules/ace-builds/src-noconflict/worker-javascript.js', to: 'pages' },
-                    { from: 'node_modules/pdfjs-dist/cmaps', to: 'pages/cmaps' },
-                    { from: 'node_modules/pdfjs-dist/build/pdf.min.mjs', to: 'pages' },
-                    { from: 'node_modules/pdfjs-dist/build/pdf.worker.min.mjs', to: 'pages' },
                     { from: 'src/icons', to: 'icons' },
                     { from: 'src/content_scripts/content.css', to: 'content.css' },
                     {

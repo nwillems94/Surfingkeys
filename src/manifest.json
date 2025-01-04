@@ -73,7 +73,6 @@
         "pages/default.js",
         "pages/emoji.tsv",
         "pages/frontend.html",
-        "pages/pdf_viewer.html",
         "pages/shadow.css",
         "pages/default.css"
     ],

@@ -53,43 +53,6 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
         imapkey('<Ctrl-Alt-i>', '#15Open neovim for current input', function() {
             openVim(true);
         });
-        mapkey(';s', 'Toggle PDF viewer from SurfingKeys', function() {
-            var pdfUrl = window.location.href;
-            if (pdfUrl.indexOf(chrome.runtime.getURL("/pages/pdf_viewer.html")) === 0) {
-                const filePos = window.location.search.indexOf("=") + 1;
-                pdfUrl = window.location.search.substr(filePos);
-                RUNTIME('updateSettings', {
-                    settings: {
-                        "noPdfViewer": 1
-                    }
-                }, (resp) => {
-                    window.location.replace(pdfUrl);
-                });
-            } else {
-                if (document.querySelector("EMBED") && document.querySelector("EMBED").getAttribute("type") === "application/pdf") {
-                    RUNTIME('updateSettings', {
-                        settings: {
-                            "noPdfViewer": 0
-                        }
-                    }, (resp) => {
-                        window.location.replace(pdfUrl);
-                    });
-                } else {
-                    RUNTIME('getSettings', {
-                        key: 'noPdfViewer'
-                    }, function(resp) {
-                        const info = resp.settings.noPdfViewer ? "PDF viewer enabled." : "PDF viewer disabled.";
-                        RUNTIME('updateSettings', {
-                            settings: {
-                                "noPdfViewer": !resp.settings.noPdfViewer
-                            }
-                        }, (r) => {
-                            showBanner(info);
-                        });
-                    });
-                }
-            }
-        });
     }
 
     mapkey(";ql", '#0Show last action', function() {
@@ -526,10 +489,6 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
     });
     mapkey('yy', "#7Copy current page's URL", function() {
         var url = window.location.href;
-        if (url.indexOf(chrome.runtime.getURL("/pages/pdf_viewer.html")) === 0) {
-            const filePos = window.location.search.indexOf("=") + 1;
-            url = window.location.search.substr(filePos);
-        }
         clipboard.write(url);
     });
     mapkey('yY', "#7Copy all tabs's url", function() {
