@@ -119,34 +119,6 @@ module.exports = (env, argv) => {
         resolve: {
             extensions: ['.ts', '.js'],
         },
-        module: {
-            rules: [
-                {
-                    test: /\.ts$/,
-                    exclude: /node_modules/,
-                    loader: 'ts-loader',
-                },
-                {
-                    test: /\.css$/,
-                    use: [
-                        { loader: "style-loader", options: { injectType: "linkTag" } },
-                        { loader: "file-loader" },
-                    ]
-                },
-                {
-                    test: /purify.js/,
-                    use: [
-                        {
-                            loader: 'string-replace-loader',
-                            options: {
-                                search: '//# sourceMappingURL=purify.js.map',
-                                replace: ''
-                            }
-                        }
-                    ]
-                },
-            ],
-        },
         target: 'web',
         entry: entry,
         optimization: {
@@ -205,22 +177,6 @@ module.exports = (env, argv) => {
         },
         target: 'web',
         entry: moduleEntries,
-        module: {
-            rules: [
-                {
-                    test: /\.ts$/,
-                    exclude: /node_modules/,
-                    loader: 'ts-loader',
-                },
-                {
-                    test: /\.css$/,
-                    use: [
-                        { loader: "style-loader", options: { injectType: "linkTag" } },
-                        { loader: "file-loader" },
-                    ]
-                },
-            ],
-        },
         optimization: {
             minimizer: [new TerserPlugin({
                 extractComments: false,
