@@ -98,10 +98,7 @@ module.exports = (env, argv) => {
         moduleEntries['pages/neovim_lib'] = './src/nvim/renderer.ts';
         moduleEntries['api'] = './src/user_scripts/index.js';
     }
-    if (browser !== "safari") {
-        entry['pages/markdown'] = './src/content_scripts/markdown.js';
-    } else {
-        pagesCopyOptions.ignore.push('**/markdown.html');
+    if (browser == "safari") {
         pagesCopyOptions.ignore.push('**/donation.png');
     }
     console.log(pagesCopyOptions);

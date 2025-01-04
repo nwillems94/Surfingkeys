@@ -93,8 +93,7 @@ var runtime = (function() {
             aceKeybindings: "vim",
             caretViewport: null,
             mouseSelectToQuery: [],
-            useNeovim: false,
-            useLocalMarkdownAPI: true
+            useNeovim: false
         },
     }, _handlers = {};
 
