@@ -69,7 +69,6 @@
         }
     ],
     "web_accessible_resources": [
-        "pages/neovim.html",
         "pages/default.js",
         "pages/frontend.html",
         "pages/shadow.css",

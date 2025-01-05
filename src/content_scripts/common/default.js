@@ -39,21 +39,6 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
         front.openOmniquery({query: getWordUnderCursor(), style: "opacity: 0.8;"});
     });
     imapkey("<Ctrl-'>", '#15Toggle quotes in an input element', toggleQuote);
-    function openVim(useNeovim) {
-        var element = getRealEdit();
-        element.blur();
-        insert.exit();
-        front.showEditor(element, null, null, useNeovim);
-    }
-    imapkey('<Ctrl-i>', '#15Open vim editor for current input', function() {
-        openVim(false);
-    });
-    const browserName = getBrowserName();
-    if (browserName === "Chrome") {
-        imapkey('<Ctrl-Alt-i>', '#15Open neovim for current input', function() {
-            openVim(true);
-        });
-    }
 
     mapkey(";ql", '#0Show last action', function() {
         showPopup(htmlEncode(runtime.conf.lastKeys.map(function(k) {
@@ -66,11 +51,6 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
     });
     mapkey('i', '#1Go to edit box', function() {
         hints.create(getCssSelectorsOfEditable(), hints.dispatchMouseClick);
-    });
-    mapkey('I', '#1Go to edit box with vim editor', function() {
-        hints.create(getCssSelectorsOfEditable(), function(element) {
-            front.showEditor(element);
-        });
     });
 
     mapkey('zv', '#9Enter visual mode, and select whole element', function() {
@@ -626,16 +606,6 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
     mapkey(';e', '#11Edit Settings', function() {
         tabOpenLink("/pages/options.html");
     });
-    mapkey(';u', '#4Edit current URL with vim editor, and open in new tab', function() {
-        front.showEditor(window.location.href, function(data) {
-            tabOpenLink(data);
-        }, 'url');
-    });
-    mapkey(';U', '#4Edit current URL with vim editor, and reload', function() {
-        front.showEditor(window.location.href, function(data) {
-            window.location.href = data;
-        }, 'url');
-    });
 
     addSearchAlias('g', 'google', 'https://www.google.com/search?q=', 's', 'https://www.google.com/complete/search?client=chrome-omni&gs_ri=chrome-ext&oit=1&cp=1&pgcl=7&q=', function(response) {
         var res = JSON.parse(response.text);
@@ -754,9 +724,6 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
         });
         mapkey(';i', '#12Open Chrome Inspect', function() {
             tabOpenLink("chrome://inspect/#devices");
-        });
-        mapkey(';v', '#11Open neovim', function() {
-            tabOpenLink("/pages/neovim.html");
         });
     }
 

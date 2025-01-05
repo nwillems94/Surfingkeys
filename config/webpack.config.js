@@ -46,7 +46,6 @@ function modifyManifest(browser, mode, buffer) {
                 "resources": [
                     "_favicon/*",
                     "api.js",
-                    "pages/neovim.html",
                     "pages/default.js",
                     "pages/frontend.html",
                     "pages/shadow.css",
@@ -87,14 +86,10 @@ module.exports = (env, argv) => {
         'pages/options': './src/content_scripts/options.js',
     };
     const pagesCopyOptions = {
-        ignore: [
-            '**/neovim.*',
-        ]
+        ignore: []
     };
     if (browser === "chrome") {
         pagesCopyOptions.ignore = [];
-        entry['pages/neovim'] = './src/pages/neovim.js';
-        moduleEntries['pages/neovim_lib'] = './src/nvim/renderer.ts';
         moduleEntries['api'] = './src/user_scripts/index.js';
     }
     if (browser == "safari") {
