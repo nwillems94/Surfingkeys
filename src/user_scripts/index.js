@@ -22,11 +22,6 @@ function isInUIFrame() {
         return !domain || domain.test(document.location.href) || domain.test(window.origin);
     }
 
-    function cmap(new_keystroke, old_keystroke, domain, new_annotation) {
-        if (_isDomainApplicable(domain)) {
-            dispatchSKEvent("front", ['addMapkey', "Omnibar", new_keystroke, old_keystroke]);
-        }
-    }
 
 const userDefinedFunctions = {};
 function mapkey(keys, annotation, jscode, options) {
@@ -106,7 +101,6 @@ const api = {
     RUNTIME,
     aceVimMap,
     addVimMapKey,
-    cmap,
     imap,
     imapkey,
     isElementPartiallyInViewport,
@@ -199,9 +193,6 @@ const api = {
         registerInlineQuery: (args) => {
             inlineQuery = args;
             dispatchSKEvent('api', ['front:registerInlineQuery']);
-        },
-        openOmnibar: (args) => {
-            dispatchSKEvent('api', ['front:openOmnibar', args]);
         },
         showBanner,
         showPopup

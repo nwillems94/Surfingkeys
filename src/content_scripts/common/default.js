@@ -17,7 +17,6 @@ import {
 
 export default function(api, clipboard, insert, normal, hints, visual, front, browser) {
     const {
-        cmap,
         map,
         mapkey,
         imapkey,
@@ -33,10 +32,7 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
     mapkey('?', '#0Show usage', function() {
         front.showUsage();
     });
-    mapkey('Q', '#7Open omnibar for word translation', function() {
-        front.openOmniquery({query: getWordUnderCursor(), style: "opacity: 0.8;"});
-    });
-    imapkey("<Ctrl-'>", '#14Toggle quotes in an input element', toggleQuote);
+    imapkey("<Ctrl-'>", '#13Toggle quotes in an input element', toggleQuote);
 
     mapkey(";ql", '#0Show last action', function() {
         showPopup(htmlEncode(runtime.conf.lastKeys.map(function(k) {
@@ -51,7 +47,7 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
         hints.create(getCssSelectorsOfEditable(), hints.dispatchMouseClick);
     });
 
-    mapkey('zv', '#8Enter visual mode, and select whole element', function() {
+    mapkey('zv', '#7Enter visual mode, and select whole element', function() {
         visual.toggle("z");
     });
     mapkey('yv', '#6Yank text of an element', function() {
@@ -67,24 +63,24 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
         }, { multipleHits: true });
     });
 
-    mapkey('V', '#8Restore visual mode', function() {
+    mapkey('V', '#7Restore visual mode', function() {
         visual.restore();
     });
-    mapkey('*', '#8Find selected text in current page', function() {
+    mapkey('*', '#7Find selected text in current page', function() {
         visual.star();
         visual.toggle();
     });
 
-    vmapkey('<Ctrl-u>', '#8Backward 20 lines', function() {
+    vmapkey('<Ctrl-u>', '#7Backward 20 lines', function() {
         visual.feedkeys('20k');
     });
-    vmapkey('<Ctrl-d>', '#8Forward 20 lines', function() {
+    vmapkey('<Ctrl-d>', '#7Forward 20 lines', function() {
         visual.feedkeys('20j');
     });
 
-    mapkey('m', '#9Add current URL to vim-like marks', normal.addVIMark);
-    mapkey("'", '#9Jump to vim-like mark', normal.jumpVIMark);
-    mapkey("<Ctrl-'>", '#9Jump to vim-like mark in new tab.', function(mark) {
+    mapkey('m', '#8Add current URL to vim-like marks', normal.addVIMark);
+    mapkey("'", '#8Jump to vim-like mark', normal.jumpVIMark);
+    mapkey("<Ctrl-'>", '#8Jump to vim-like mark in new tab.', function(mark) {
         normal.jumpVIMark(mark);
     });
 
@@ -178,15 +174,15 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
         hints.create("", hints.dispatchMouseClick);
     }, {repeatIgnore: true});
 
-    mapkey("v", '#8Toggle visual mode', function() {
+    mapkey("v", '#7Toggle visual mode', function() {
         visual.toggle();
     }, {repeatIgnore: true});
 
-    mapkey("n", '#8Next found text', function() {
+    mapkey("n", '#7Next found text', function() {
         visual.next(false);
     }, {repeatIgnore: true});
 
-    mapkey("N", '#8Previous found text', function() {
+    mapkey("N", '#7Previous found text', function() {
         visual.next(true);
     }, {repeatIgnore: true});
 
@@ -194,7 +190,7 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
         hints.create(normal.refreshScrollableElements(), hints.dispatchMouseClick);
     });
 
-    vmapkey("q", '#8Translate word under cursor', function() {
+    vmapkey("q", '#7Translate word under cursor', function() {
         var w = getWordUnderCursor();
         browser.readText(w);
         var b = visual.getCursorPixelPos();
@@ -238,9 +234,13 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
         });
     });
 
-
-    map('g0', ':feedkeys 99E', 0, "#3Go to the first tab");
-    map('g$', ':feedkeys 99R', 0, "#3Go to the last tab");
+    
+    mapkey('g0', '#3Go to the first tab', function() {
+        normal.feedkeys('99E');
+    });
+    mapkey('g$', '#3Go to the first tab', function() {
+            normal.feedkeys('99R');
+    });
     mapkey('zr', '#3zoom reset', function() {
         RUNTIME('setZoom', {
             zoomFactor: 0
@@ -257,7 +257,6 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
         });
     });
 
-    map('ZQ', ':quit');
     mapkey('ZZ', '#5Save session and quit', function() {
         RUNTIME('createSession', {
             name: 'LAST',
@@ -346,10 +345,6 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
     });
 
     map('<Ctrl-i>', 'I');
-    cmap('<ArrowDown>', '<Tab>');
-    cmap('<ArrowUp>', '<Shift-Tab>');
-    cmap('<Ctrl-n>', '<Tab>');
-    cmap('<Ctrl-p>', '<Shift-Tab>');
     mapkey('q', '#1Click on an Image or a button', function() {
         hints.create("img, button", hints.dispatchMouseClick);
     });
@@ -393,21 +388,6 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
     }, {repeatIgnore: true});
     mapkey('r', '#4Reload the page', function() {
         RUNTIME("reloadTab", { nocache: false });
-    });
-    mapkey('oi', '#7Open incognito window', function() {
-        RUNTIME('openIncognito', {
-            url: window.location.href
-        });
-    });
-
-    mapkey('H', '#7Open opened URL in current tab', function() {
-        front.openOmnibar({type: "TabURLs"});
-    });
-    mapkey('om', '#7Open URL from vim-like marks', function() {
-        front.openOmnibar({type: "VIMarks"});
-    });
-    mapkey(':', '#7Open commands', function() {
-        front.openOmnibar({type: "Commands"});
     });
     mapkey('yi', '#6Yank text of an input', function() {
         hints.create("input, textarea, select", function(element) {
@@ -471,13 +451,6 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
     });
     mapkey('yl', "#6Copy current page's title", function() {
         clipboard.write(document.title);
-    });
-    mapkey('yQ', '#6Copy all query history of OmniQuery.', function() {
-        RUNTIME('getSettings', {
-            key: 'OmniQueryHistory'
-        }, function(response) {
-            clipboard.write(response.settings.OmniQueryHistory.join("\n"));
-        });
     });
 
     function getFormData(form, format) {
@@ -592,7 +565,7 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
     mapkey('gxp', '#3Close playing tab', function() {
         RUNTIME("closeAudibleTab");
     });
-    mapkey(';e', '#10Edit Settings', function() {
+    mapkey(';e', '#9Edit Settings', function() {
         tabOpenLink("/pages/options.html");
     });
 
@@ -602,7 +575,7 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
             tabOpenLink("about:blank");
         });
     } else if (bn === "Chrome") {
-        mapkey('cp', '#12Toggle proxy for current site', function() {
+        mapkey('cp', '#11Toggle proxy for current site', function() {
             var host = window.location.host.replace(/:\d+/,'');
             if (host && host.length) {
                 RUNTIME('updateProxy', {
@@ -611,14 +584,14 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
                 });
             }
         });
-        mapkey(';cp', '#12Copy proxy info', function() {
+        mapkey(';cp', '#11Copy proxy info', function() {
             RUNTIME('getSettings', {
                 key: ['proxyMode', 'proxy', 'autoproxy_hosts']
             }, function(response) {
                 clipboard.write(JSON.stringify(response.settings, null, 4));
             });
         });
-        mapkey(';ap', '#12Apply proxy info from clipboard', function() {
+        mapkey(';ap', '#11Apply proxy info from clipboard', function() {
             clipboard.read(function(response) {
                 var proxyConf = JSON.parse(response.data);
                 RUNTIME('updateProxy', {
@@ -629,86 +602,50 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
                 });
             });
         });
-        // create shortcuts for the command with different parameters
-        map(';pa', ':setProxyMode always', 0, '#12set proxy mode `always`');
-        map(';pb', ':setProxyMode byhost', 0, '#12set proxy mode `byhost`');
-        map(';pd', ':setProxyMode direct', 0, '#12set proxy mode `direct`');
-        map(';ps', ':setProxyMode system', 0, '#12set proxy mode `system`');
-        map(';pc', ':setProxyMode clear', 0, '#12set proxy mode `clear`');
-        mapkey('gr', '#13Read selected text or text from clipboard', function() {
+        mapkey('gr', '#12Read selected text or text from clipboard', function() {
             clipboard.read(function(response) {
                 readText(window.getSelection().toString() || response.data, {verbose: true});
             });
         });
-        vmapkey('gr', '#8Read selected text', function() {
+        vmapkey('gr', '#7Read selected text', function() {
             readText(window.getSelection().toString(), {verbose: true});
         });
 
         mapkey('on', '#3Open newtab', function() {
             tabOpenLink("chrome://newtab/");
         });
-        mapkey('ga', '#11Open Chrome About', function() {
+        mapkey('ga', '#10Open Chrome About', function() {
             tabOpenLink("chrome://help/");
         });
-        mapkey('gb', '#11Open Chrome Bookmarks', function() {
+        mapkey('gb', '#10Open Chrome Bookmarks', function() {
             tabOpenLink("chrome://bookmarks/");
         });
-        mapkey('gc', '#11Open Chrome Cache', function() {
+        mapkey('gc', '#10Open Chrome Cache', function() {
             tabOpenLink("chrome://cache/");
         });
-        mapkey('gd', '#11Open Chrome Downloads', function() {
+        mapkey('gd', '#10Open Chrome Downloads', function() {
             tabOpenLink("chrome://downloads/");
         });
-        mapkey('gh', '#11Open Chrome History', function() {
+        mapkey('gh', '#10Open Chrome History', function() {
             tabOpenLink("chrome://history/");
         });
-        mapkey('gk', '#11Open Chrome Cookies', function() {
+        mapkey('gk', '#10Open Chrome Cookies', function() {
             tabOpenLink("chrome://settings/cookies");
         });
-        mapkey('ge', '#11Open Chrome Extensions', function() {
+        mapkey('ge', '#10Open Chrome Extensions', function() {
             tabOpenLink("chrome://extensions/");
         });
-        mapkey('gn', '#11Open Chrome net-internals', function() {
+        mapkey('gn', '#10Open Chrome net-internals', function() {
             tabOpenLink("chrome://net-internals/#proxy");
         });
-        mapkey(';i', '#11Open Chrome Inspect', function() {
+        mapkey(';i', '#10Open Chrome Inspect', function() {
             tabOpenLink("chrome://inspect/#devices");
         });
     }
 
     if (!getBrowserName().startsWith("Safari")) {
-        mapkey('t', '#7Open a URL', function() {
-            front.openOmnibar({type: "URLs"});
-        });
-        mapkey('go', '#7Open a URL in current tab', function() {
-            front.openOmnibar({type: "URLs", tabbed: false});
-        });
-        mapkey('ox', '#7Open recently closed URL', function() {
-            front.openOmnibar({type: "RecentlyClosed"});
-        });
         mapkey('X', '#3Restore closed tab', function() {
             RUNTIME("openLast");
-        });
-        mapkey('b', '#7Open a bookmark', function() {
-            front.openOmnibar(({type: "Bookmarks"}));
-        });
-        mapkey('ab', '#7Bookmark current page to selected folder', function() {
-            var page = {
-                url: window.location.href,
-                title: document.title
-            };
-            front.openOmnibar(({type: "AddBookmark", extra: page}));
-        });
-        mapkey('oh', '#7Open URL from history', function() {
-            front.openOmnibar({type: "History"});
-        });
-        mapkey('W', '#3Move current tab to another window',  function() {
-            front.openOmnibar(({type: "Windows"}));
-        });
-        mapkey(';gt', '#3Gather filtered tabs into current window', function() {
-            front.openOmnibar({type: "Tabs", extra: {
-                action: "gather"
-            }});
         });
         mapkey(';gw', '#3Gather all tabs into current window',  function() {
             RUNTIME("gatherWindows");
@@ -733,7 +670,7 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
                 clipboard.write(items.join(','));
             });
         });
-        mapkey('gs', '#11View page source', function() {
+        mapkey('gs', '#10View page source', function() {
             RUNTIME("viewSource", { tab: { tabbed: true }});
         });
         mapkey(';di', '#1Download image', function() {
@@ -743,25 +680,25 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
                 });
             });
         });
-        mapkey(';j', '#11Close Downloads Shelf', function() {
+        mapkey(';j', '#10Close Downloads Shelf', function() {
             RUNTIME("closeDownloadsShelf", {clearHistory: true});
         });
-        mapkey(';dh', '#13Delete history older than 30 days', function() {
+        mapkey(';dh', '#12Delete history older than 30 days', function() {
             RUNTIME('deleteHistoryOlderThan', {
                 days: 30
             });
         });
-        mapkey(';yh', '#13Yank histories', function() {
+        mapkey(';yh', '#12Yank histories', function() {
             RUNTIME('getHistory', {}, function(response) {
                 clipboard.write(response.history.map(h => h.url).join("\n"));
             });
         });
-        mapkey(';ph', '#13Put histories from clipboard', function() {
+        mapkey(';ph', '#12Put histories from clipboard', function() {
             clipboard.read(function(response) {
                 RUNTIME('addHistories', {history: response.data.split("\n")});
             });
         });
-        mapkey(';db', '#13Remove bookmark for current page', function() {
+        mapkey(';db', '#12Remove bookmark for current page', function() {
             RUNTIME('removeBookmark');
         });
     }

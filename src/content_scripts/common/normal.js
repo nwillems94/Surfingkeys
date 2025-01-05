@@ -53,12 +53,12 @@ function createLurk(normal) {
     self.map_node = self.mappings;
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Alt-i>"), {
         annotation: "Enter normal mode",
-        feature_group: 15,
+        feature_group: 14,
         code: enterNormal
     });
     self.mappings.add("p", {
         annotation: "Enter ephemeral normal mode to temporarily enable SurfingKeys",
-        feature_group: 15,
+        feature_group: 14,
         code: function() {
             enterNormal();
             setTimeout(() => {
@@ -926,7 +926,7 @@ function createNormal(insert) {
 
     self.mappings.add("/", {
         annotation: "Find in current page",
-        feature_group: 8,
+        feature_group: 7,
         repeatIgnore: true,
         code: function() {
             dispatchSKEvent("front", ['openFinder']);

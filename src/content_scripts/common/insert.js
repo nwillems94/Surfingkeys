@@ -58,12 +58,12 @@ function createInsert() {
     self.map_node = self.mappings;
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Ctrl-e>"), {
         annotation: "Move the cursor to the end of the line",
-        feature_group: 14,
+        feature_group: 13,
         code: moveCursorEOL
     });
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Ctrl-f>"), {
         annotation: "Move the cursor to the beginning of the line",
-        feature_group: 14,
+        feature_group: 13,
         code: function() {
             var element = getRealEdit();
             if (element.setSelectionRange !== undefined) {
@@ -77,7 +77,7 @@ function createInsert() {
     });
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Ctrl-u>"), {
         annotation: "Delete all entered characters before the cursor",
-        feature_group: 14,
+        feature_group: 13,
         code: function() {
             var element = getRealEdit();
             if (element.setSelectionRange !== undefined) {
@@ -92,7 +92,7 @@ function createInsert() {
     });
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Alt-b>"), {
         annotation: "Move the cursor Backward 1 word",
-        feature_group: 14,
+        feature_group: 13,
         code: function() {
             var element = getRealEdit();
             if (element.setSelectionRange !== undefined) {
@@ -106,7 +106,7 @@ function createInsert() {
     });
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Alt-f>"), {
         annotation: "Move the cursor Forward 1 word",
-        feature_group: 14,
+        feature_group: 13,
         code: function() {
             var element = getRealEdit();
             if (element.setSelectionRange !== undefined) {
@@ -120,7 +120,7 @@ function createInsert() {
     });
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Alt-w>"), {
         annotation: "Delete a word backwards",
-        feature_group: 14,
+        feature_group: 13,
         code: function() {
             var element = getRealEdit();
             if (element.setSelectionRange !== undefined) {
@@ -140,7 +140,7 @@ function createInsert() {
     });
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Alt-d>"), {
         annotation: "Delete a word forwards",
-        feature_group: 14,
+        feature_group: 13,
         code: function() {
             var element = getRealEdit();
             if (element.setSelectionRange !== undefined) {
@@ -160,7 +160,7 @@ function createInsert() {
     });
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Esc>"), {
         annotation: "Exit insert mode",
-        feature_group: 14,
+        feature_group: 13,
         stopPropagation: function(key) {
             // return true only if bind key is not an ASCII key
             // so that imap(',,', "<Esc>") won't leave a comma in input

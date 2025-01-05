@@ -23,8 +23,6 @@ import createVisual from '../common/visual.js';
 import createHints from '../common/hints.js';
 import createAPI from '../common/api.js';
 import createDefaultMappings from '../common/default.js';
-import createOmnibar from './omnibar.js';
-import createCommands from './command.js';
 
 const Front = (function() {
     const clipboard = createClipboard();
@@ -38,15 +36,11 @@ const Front = (function() {
     const self = new Mode("Front");
     self._actions = {};
     self.topSize = [0, 0];
-    const omnibar = createOmnibar(self, clipboard);
-
-    createCommands(normal, omnibar.command, omnibar);
 
     const modes = {
         Insert: insert,
         Normal: normal,
         Visual: visual,
-        Omnibar: omnibar,
     };
 
     const api = createAPI(clipboard, insert, normal, hints, visual, self, {});
@@ -97,8 +91,6 @@ const Front = (function() {
                         pressedHintKeys = "";
                         self.hidePopup();
                     }
-                } else {
-                    showElement(_omnibar, {type: 'Tabs'});
                 }
 
                 event.sk_stopPropagation = true;
@@ -174,7 +166,6 @@ const Front = (function() {
         }
     };
 
-    const _omnibar = document.getElementById('sk_omnibar');
     self.statusBar = document.getElementById('sk_status');
     const _usage = document.getElementById('sk_usage');
     const _popup = document.getElementById('sk_popup');
@@ -290,11 +281,7 @@ const Front = (function() {
     _actions['chooseTab'] = function() {
         const tabsThreshold = Math.min(runtime.conf.tabsThreshold, Math.ceil(window.innerWidth / 26));
         RUNTIME('getTabs', {queryInfo: {currentWindow: true}, tabsThreshold}, function(response) {
-            if (response.tabs.length > tabsThreshold) {
-                showElement(_omnibar, {type: 'Tabs'});
-            } else if (response.tabs.length > 0) {
-                showElement(_tabs, response.tabs);
-            }
+            showElement(_tabs, response.tabs);
         });
     };
     self.chooseTab = _actions['chooseTab'];
@@ -317,15 +304,14 @@ const Front = (function() {
             'Page Navigation',       // 4
             'Sessions',              // 5
             'Clipboard',             // 6
-            'Omnibar',               // 7
-            'Visual Mode',           // 8
-            'vim-like marks',        // 9
-            'Settings',              // 10
-            'Chrome URLs',           // 11
-            'Proxy',                 // 12
-            'Misc',                  // 13
-            'Insert Mode',           // 14
-            'Lurk Mode',             // 15
+            'Visual Mode',           // 7
+            'vim-like marks',        // 8
+            'Settings',              // 9
+            'Chrome URLs',           // 10
+            'Proxy',                 // 11
+            'Misc',                  // 12
+            'Insert Mode',           // 13
+            'Lurk Mode',             // 14
         ];
 
         initL10n(function(locale) {
@@ -336,7 +322,6 @@ const Front = (function() {
                     htmlEncode(Mode.specialKeys["<Alt-s>"][lh - 1]), locale("Toggle SurfingKeys on current site")));
             }
 
-            metas = metas.concat(getAnnotations(omnibar.mappings));
             metas.forEach(function(meta) {
                 const w = KeyboardUtils.decodeKeystroke(meta.word);
                 const annotation = localizeAnnotation(locale, meta.annotation);
@@ -433,12 +418,7 @@ const Front = (function() {
         showElement(_editor, message);
     };
     self.showEditor = _actions['showEditor'];
-    _actions['openOmnibar'] = function(message) {
-        showElement(_omnibar, message);
-        var style = message.style || "";
-        setSanitizedContent(_omnibar.querySelector('style'), `#sk_omnibar {${style}}`);
-    };
-    self.openOmnibar = _actions['openOmnibar'];
+
     _actions['openFinder'] = function() {
         Find.open();
     };

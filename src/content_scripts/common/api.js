@@ -68,7 +68,7 @@ function createAPI(clipboard, insert, normal, hints, visual, front, browser) {
                     p = p.substr(0, p.length - 1);
                 }
             }
-            var keybound = createKeyTarget(jscode, {annotation: annotation, feature_group: ((mode === visual) ? 8 :13)}, options.repeatIgnore);
+            var keybound = createKeyTarget(jscode, {annotation: annotation, feature_group: ((mode === visual) ? 7 :12)}, options.repeatIgnore);
             mode.mappings.add(keys, keybound);
         }
     }
@@ -235,22 +235,6 @@ function createAPI(clipboard, insert, normal, hints, visual, front, browser) {
     }
 
     /**
-     * Map a key sequence to another in omnibar.
-     *
-     * @param {string} new_keystroke a key sequence to replace
-     * @param {string} old_keystroke a key sequence to be replaced
-     * @param {regex} [domain=null] a Javascript regex pattern to identify the domains that this mapping works.
-     * @param {string} [new_annotation=null] use it instead of the annotation from old_keystroke if provided.
-     *
-     * @see map
-     */
-    function cmap(new_keystroke, old_keystroke, domain, new_annotation) {
-        if (_isDomainApplicable(domain)) {
-            dispatchSKEvent("front", ['addMapkey', "Omnibar", new_keystroke, old_keystroke]);
-        }
-    }
-
-    /**
      * Map a key sequence to another in visual mode.
      *
      * @param {string} new_keystroke a key sequence to replace
@@ -318,7 +302,6 @@ function createAPI(clipboard, insert, normal, hints, visual, front, browser) {
         "hints:setNumeric": hints.setNumeric,
         "hints:style": hints.style,
         "front:registerInlineQuery": front.registerInlineQuery,
-        "front:openOmnibar": front.openOmnibar,
         "normal:feedkeys": normal.feedkeys,
         "normal:jumpVIMark": normal.jumpVIMark,
         "normal:passThrough": normal.passThrough,
@@ -350,7 +333,6 @@ function createAPI(clipboard, insert, normal, hints, visual, front, browser) {
         RUNTIME,
         aceVimMap,
         addVimMapKey,
-        cmap,
         imap,
         imapkey,
         isElementPartiallyInViewport,
@@ -386,7 +368,6 @@ function createAPI(clipboard, insert, normal, hints, visual, front, browser) {
             style: visual.style,
         },
         Front: {
-            openOmnibar: front.openOmnibar,
             registerInlineQuery: front.registerInlineQuery,
             showBanner,
             showPopup,

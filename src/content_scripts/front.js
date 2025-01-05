@@ -210,35 +210,6 @@ function createFront(insert, normal, hints, visual, browser) {
         }
     };
 
-    /**
-     * Open the omnibar.
-     *
-     * @param {object} args `type` the sub type for the omnibar, which can be `Bookmarks`, `AddBookmark`, `History`, `URLs`, `RecentlyClosed`, `TabURLs`, `Tabs`, `Windows`, `VIMarks`, `SearchEngine`, `Commands`, `OmniQuery` and `UserURLs`.
-     * @name Front.openOmnibar
-     *
-     * @example
-     * mapkey('ou', '#8Open AWS services', function() {
-     *     var services = Array.from(top.document.querySelectorAll('#awsc-services-container li[data-service-href]')).map(function(li) {
-     *         return {
-     *             title: li.querySelector("span.service-label").textContent,
-     *             url: li.getAttribute('data-service-href')
-     *         };
-     *     });
-     *     if (services.length === 0) {
-     *         services = Array.from(top.document.querySelectorAll('div[data-testid="awsc-nav-service-list"] li[data-testid]>a')).map(function(a) {
-     *             return {
-     *                 title: a.innerText,
-     *                 url: a.href
-     *             };
-     *         });
-     *     }
-     *     Front.openOmnibar({type: "UserURLs", extra: services});
-     * }, {domain: /console.amazonaws|console.aws.amazon.com/i});
-     */
-    self.openOmnibar = function(args) {
-        args.action = 'openOmnibar';
-        self.command(args);
-    };
 
     var _inlineQuery = false;
     var _showQueryResult;
@@ -297,9 +268,6 @@ function createFront(insert, normal, hints, visual, browser) {
      */
     self.registerInlineQuery = function() {
         _inlineQuery = true;
-    };
-    self.openOmniquery = function(args) {
-        self.openOmnibar(({type: "OmniQuery", extra: args.query, style: args.style}));
     };
 
     var _keyHints = {
@@ -467,30 +435,6 @@ function createFront(insert, normal, hints, visual, browser) {
         }
     };
 
-    _actions["omnibar_query_entered"] = function(response) {
-        runtime.updateHistory('OmniQuery', response.query);
-        self.performInlineQuery(response.query, {
-            top: 0,
-            left: 80,
-            height: 0,
-            width: 100
-        },function(pos, queryResult) {
-            if (queryResult.constructor.name !== "Array") {
-                queryResult = [queryResult];
-            }
-            if (getBrowserName() === "Chrome") {
-                var sentence = visual.findSentenceOf(response.query);
-                if (sentence.length > 0) {
-                    queryResult.push(sentence);
-                }
-            }
-
-            self.command({
-                action: 'updateOmnibarResult',
-                words: queryResult
-            });
-        });
-    };
 
     _actions["getBackFocus"] = function(response) {
         window.focus();
