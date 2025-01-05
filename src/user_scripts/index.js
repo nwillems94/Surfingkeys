@@ -75,12 +75,6 @@ initSKFunctionListener("user", {
             userDefinedFunctions[keys](para);
         }
     },
-    getSearchSuggestions: (url, response, request, callbackId, origin) => {
-        if (functionsToListSuggestions.hasOwnProperty(url)) {
-            const ret = functionsToListSuggestions[url](response, request);
-            dispatchSKEvent("front", [callbackId, ret]);
-        }
-    },
     performInlineQuery: (query, callbackId, origin) => {
         const url = (typeof(inlineQuery.url) === "function") ? inlineQuery.url(query) : inlineQuery.url + query;
         httpRequest({
@@ -107,19 +101,11 @@ initSKFunctionListener("user", {
     },
 }, true);
 
-function addSearchAlias(alias, prompt, search_url, search_leader_key, suggestion_url, callback_to_parse_suggestion, only_this_site_key, options) {
-    if (!/^[\u0000-\u007f]*$/.test(alias)) {
-        throw `Invalid alias ${alias}, which must be ASCII characters.`;
-    }
-    functionsToListSuggestions[suggestion_url] = callback_to_parse_suggestion;
-    dispatchSKEvent('api', ['addSearchAlias', alias, prompt, search_url, search_leader_key, suggestion_url, "user", only_this_site_key, options]);
-}
 
 const api = {
     RUNTIME,
     aceVimMap,
     addVimMapKey,
-    addSearchAlias,
     cmap,
     imap,
     imapkey,
@@ -142,12 +128,6 @@ const api = {
     },
     unmapAllExcept: (keystrokes, domain) => {
         dispatchSKEvent('api', ['unmapAllExcept', keystrokes, domain]);
-    },
-    removeSearchAlias: (alias, search_leader_key, only_this_site_key) => {
-        dispatchSKEvent('api', ['removeSearchAlias', alias, search_leader_key, only_this_site_key]);
-    },
-    searchSelectedWith: (se, onlyThisSite, interactive, alias) => {
-        dispatchSKEvent('api', ['searchSelectedWith', se, onlyThisSite, interactive, alias]);
     },
     tabOpenLink,
     Clipboard: {

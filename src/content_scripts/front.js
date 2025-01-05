@@ -77,25 +77,6 @@ function createFront(insert, normal, hints, visual, browser) {
     }
 
     var _listSuggestions = {};
-    self.addSearchAlias = function (alias, prompt, url, suggestionURL, listSuggestion, options) {
-        if (suggestionURL && listSuggestion) {
-            _listSuggestions[suggestionURL] = listSuggestion;
-        }
-        applyUICommand({
-            action: 'addSearchAlias',
-            alias: alias,
-            prompt: prompt,
-            url: url,
-            suggestionURL: suggestionURL,
-            options: options,
-        });
-    };
-    self.removeSearchAlias = function (alias) {
-        applyUICommand({
-            action: 'removeSearchAlias',
-            alias: alias
-        });
-    };
 
     var _actions = {};
     var skCallbacks = {};
@@ -127,32 +108,6 @@ function createFront(insert, normal, hints, visual, browser) {
         } else {
             querySelectedWord();
         }
-    };
-
-    _actions["getSearchSuggestions"] = function (message) {
-        var ret = null;
-        if (_listSuggestions.hasOwnProperty(message.url)) {
-            const listSuggestion = _listSuggestions[message.url];
-            if (typeof listSuggestion === "function") {
-                ret = listSuggestion(message.response, {
-                    url: message.requestUrl,
-                    query: message.query,
-                });
-            } else {
-                ret = new Promise((resolve, reject) => {
-                    const callbackId = generateQuickGuid();
-                    skCallbacks[callbackId] = (res) => {
-                        resolve(res);
-                    };
-
-                    dispatchSKEvent('user', ["getSearchSuggestions", message.url, message.response, {
-                        url: message.requestUrl,
-                        query: message.query,
-                    }, callbackId]);
-                });
-            }
-        }
-        return ret;
     };
 
     self.executeCommand = function (cmd) {

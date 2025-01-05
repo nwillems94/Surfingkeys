@@ -316,17 +316,16 @@ const Front = (function() {
             'Tabs',                  // 3
             'Page Navigation',       // 4
             'Sessions',              // 5
-            'Search selected with',  // 6
-            'Clipboard',             // 7
-            'Omnibar',               // 8
-            'Visual Mode',           // 9
-            'vim-like marks',        // 10
-            'Settings',              // 11
-            'Chrome URLs',           // 12
-            'Proxy',                 // 13
-            'Misc',                  // 14
-            'Insert Mode',           // 15
-            'Lurk Mode',             // 16
+            'Clipboard',             // 6
+            'Omnibar',               // 7
+            'Visual Mode',           // 8
+            'vim-like marks',        // 9
+            'Settings',              // 10
+            'Chrome URLs',           // 11
+            'Proxy',                 // 12
+            'Misc',                  // 13
+            'Insert Mode',           // 14
+            'Lurk Mode',             // 15
         ];
 
         initL10n(function(locale) {

@@ -72,7 +72,7 @@ export default (normal, command, omnibar) => {
             });
         });
     });
-    command('stopReading', '#13Stop reading.', function(args) {
+    command('stopReading', '#12Stop reading.', function(args) {
         RUNTIME('stopReading');
     });
     command('feedkeys', 'feed mapkeys', function(args) {

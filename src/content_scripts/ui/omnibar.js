@@ -48,7 +48,7 @@ function createOmnibar(front, clipboard) {
     var savedFocused = -1;
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Ctrl-d>"), {
         annotation: "Delete focused item from bookmark or history",
-        feature_group: 8,
+        feature_group: 7,
         code: function () {
             var fi = self.resultsDiv.querySelector('li.focused');
             if (fi && fi.uid) {
@@ -79,7 +79,7 @@ function createOmnibar(front, clipboard) {
     const searchEngine = SearchEngine(self, front);
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Ctrl-i>"), {
         annotation: "Edit selected URL with vim editor, then open",
-        feature_group: 8,
+        feature_group: 7,
         code: function () {
             var fi = self.resultsDiv.querySelector('li.focused');
             if (fi && fi.url) {
@@ -112,7 +112,7 @@ function createOmnibar(front, clipboard) {
 
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Ctrl-j>"), {
         annotation: "Toggle Omnibar's position",
-        feature_group: 8,
+        feature_group: 7,
         code: function () {
             if (runtime.conf.omnibarPosition === "bottom") {
                 runtime.conf.omnibarPosition = "middle";
@@ -128,7 +128,7 @@ function createOmnibar(front, clipboard) {
 
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Ctrl-.>"), {
         annotation: "Show results of next page",
-        feature_group: 8,
+        feature_group: 7,
         code: function () {
             if (_items) {
                 if (_start * runtime.conf.omnibarMaxResults < _items.length) {
@@ -143,7 +143,7 @@ function createOmnibar(front, clipboard) {
 
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Ctrl-,>"), {
         annotation: "Show results of previous page",
-        feature_group: 8,
+        feature_group: 7,
         code: function () {
             if (_items) {
                 if (_start > 1) {
@@ -158,7 +158,7 @@ function createOmnibar(front, clipboard) {
 
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Ctrl-c>"), {
         annotation: "Copy selected item url or all listed item urls",
-        feature_group: 8,
+        feature_group: 7,
         code: function () {
             // hide Omnibar.input, so that we could use clipboard_holder to make copy
             self.input.style.display = "none";
@@ -182,7 +182,7 @@ function createOmnibar(front, clipboard) {
 
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Ctrl-D>"), {
         annotation: "Delete all listed items from bookmark or history",
-        feature_group: 8,
+        feature_group: 7,
         code: function () {
             var uids = Array.from(self.resultsDiv.querySelectorAll('#sk_omnibarSearchResult>ul>li')).map(function(li) {
                 return li.uid;
@@ -206,7 +206,7 @@ function createOmnibar(front, clipboard) {
 
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Ctrl-r>"), {
         annotation: "Re-sort history by visitCount or lastVisitTime",
-        feature_group: 8,
+        feature_group: 7,
         code: function () {
             if (handler && handler.onReset) {
                 handler.onReset();
@@ -216,7 +216,7 @@ function createOmnibar(front, clipboard) {
 
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Esc>"), {
         annotation: "Close Omnibar",
-        feature_group: 8,
+        feature_group: 7,
         code: function () {
             front.hidePopup();
         }
@@ -224,7 +224,7 @@ function createOmnibar(front, clipboard) {
 
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Ctrl-m>"), {
         annotation: "Create vim-like mark for selected item",
-        feature_group: 8,
+        feature_group: 7,
         code: function (mark) {
             var fi = self.resultsDiv.querySelector('li.focused');
             if (fi) {
@@ -365,21 +365,21 @@ function createOmnibar(front, clipboard) {
 
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Tab>"), {
         annotation: "Forward cycle through the candidates.",
-        feature_group: 8,
+        feature_group: 7,
         code: function () {
             rotateResult(runtime.conf.omnibarPosition === "bottom");
         }
     });
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Shift-Tab>"), {
         annotation: "Backward cycle through the candidates.",
-        feature_group: 8,
+        feature_group: 7,
         code: function () {
             rotateResult(runtime.conf.omnibarPosition !== "bottom");
         }
     });
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Ctrl-'>"), {
         annotation: "Toggle quotes in an input element",
-        feature_group: 8,
+        feature_group: 7,
         code: toggleQuote
     });
 
@@ -1281,47 +1281,6 @@ function SearchEngine(omnibar, front) {
         }, runtime.conf.omnibarSuggestionTimeout);
     };
 
-    front._actions['addSearchAlias'] = function (message) {
-        self.aliases[message.alias] = {
-            prompt: '' + message.prompt + separatorHtml,
-            url: message.url,
-            suggestionURL: message.suggestionURL
-        };
-        const searchEngineIconStorageKey = `surfingkeys.searchEngineIcon.${message.prompt}`;
-        const searchEngineIcon = localStorage.getItem(searchEngineIconStorageKey);
-        if (searchEngineIcon) {
-            self.aliases[message.alias].prompt = `<img src="${searchEngineIcon}" alt=${message.prompt} style="width: 20px;" />`;
-        } else if (front.topOrigin.startsWith("http")){
-            let iconUrl;
-            if (message.options?.favicon_url) {
-              iconUrl = new URL(message.options.favicon_url);
-            } else {
-              iconUrl = new URL(message.url);
-              iconUrl.pathname = "favicon.ico";
-              iconUrl.search = "";
-              iconUrl.hash = "";
-            }
-            RUNTIME('requestImage', {
-                url: iconUrl.href,
-            }, function(response) {
-                if (response) {
-                    localStorage.setItem(searchEngineIconStorageKey, response.text);
-                    self.aliases[message.alias].prompt = `<img src="${response.text}" alt=${message.prompt} style="width: 20px;" />`;
-                }
-            });
-        }
-    };
-    front._actions['removeSearchAlias'] = function (message) {
-        delete self.aliases[message.alias];
-    };
-    front._actions['getSearchAliases'] = function (message) {
-        front.postMessage({
-            aliases: self.aliases,
-            toContent: true,
-            id: message.id
-        });
-    };
-
     return self;
 }
 
@@ -1420,7 +1379,7 @@ function Commands(omnibar, front) {
         var cmd_code = {
             code: jscode
         };
-        var ag = parseAnnotation({annotation: annotation, feature_group: 14});
+        var ag = parseAnnotation({annotation: annotation, feature_group: 13});
         cmd_code.feature_group = ag.feature_group;
         cmd_code.annotation = ag.annotation;
         items[cmd] = cmd_code;
