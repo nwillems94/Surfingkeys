@@ -39,8 +39,7 @@
         "tabs",
         "scripting",
         "storage",
-        "sessions",
-        "downloads"
+        "sessions"
     ],
     "background": {
         "scripts": [

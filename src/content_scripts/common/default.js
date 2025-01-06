@@ -423,15 +423,5 @@ export default function(api, insert, normal, hints, visual, front, browser) {
         mapkey('gs', '#9View page source', function() {
             RUNTIME("viewSource", { tab: { tabbed: true }});
         });
-        mapkey(';di', '#1Download image', function() {
-            hints.create('img', function(element) {
-                RUNTIME('download', {
-                    url: element.src
-                });
-            });
-        });
-        mapkey(';j', '#9Close Downloads Shelf', function() {
-            RUNTIME("closeDownloadsShelf", {clearHistory: true});
-        });
     }
 }
