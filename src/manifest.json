@@ -43,9 +43,7 @@
         "storage",
         "sessions",
         "downloads",
-        "topSites",
-        "clipboardRead",
-        "clipboardWrite"
+        "topSites"
     ],
     "background": {
         "scripts": [

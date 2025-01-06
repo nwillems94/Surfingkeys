@@ -22,13 +22,6 @@ div.surfingkeys_cursor:empty {
     padding: 0px 2px;
     min-height: 12px;
 }
-#sk_clipboard {
-    position: fixed;
-    z-index: -999;
-    top: 0;
-    left: 0;
-    opacity: 0;
-}
 #sk_frame {
     position: fixed;
     border: 4px solid #434343;

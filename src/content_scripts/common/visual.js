@@ -18,7 +18,7 @@ import {
     tabOpenLink,
 } from './utils.js';
 
-function createVisual(clipboard, hints) {
+function createVisual(hints) {
     var self = new Mode("Visual");
 
     self.addEventListener('keydown', function(event) {
@@ -113,72 +113,72 @@ function createVisual(clipboard, hints) {
     self.repeats = "";
     self.mappings.add("l", {
         annotation: "forward character",
-        feature_group: 7,
+        feature_group: 6,
         code: modifySelection
     });
     self.mappings.add("h", {
         annotation: "backward character",
-        feature_group: 7,
+        feature_group: 6,
         code: modifySelection
     });
     self.mappings.add("j", {
         annotation: "forward line",
-        feature_group: 7,
+        feature_group: 6,
         code: modifySelection
     });
     self.mappings.add("k", {
         annotation: "backward line",
-        feature_group: 7,
+        feature_group: 6,
         code: modifySelection
     });
     self.mappings.add("w", {
         annotation: "forward word",
-        feature_group: 7,
+        feature_group: 6,
         code: modifySelection
     });
     self.mappings.add("e", {
         annotation: "forward word",
-        feature_group: 7,
+        feature_group: 6,
         code: modifySelection
     });
     self.mappings.add("b", {
         annotation: "backward word",
-        feature_group: 7,
+        feature_group: 6,
         code: modifySelection
     });
     self.mappings.add(")", {
         annotation: "forward sentence",
-        feature_group: 7,
+        feature_group: 6,
         code: modifySelection
     });
     self.mappings.add("(", {
         annotation: "backward sentence",
-        feature_group: 7,
+        feature_group: 6,
         code: modifySelection
     });
     self.mappings.add("}", {
         annotation: "forward paragraphboundary",
-        feature_group: 7,
+        feature_group: 6,
         code: modifySelection
     });
     self.mappings.add("{", {
         annotation: "backward paragraphboundary",
-        feature_group: 7,
+        feature_group: 6,
         code: modifySelection
     });
     self.mappings.add("0", {
         annotation: "backward lineboundary",
-        feature_group: 7,
+        feature_group: 6,
         code: modifySelection
     });
     self.mappings.add("$", {
         annotation: "forward lineboundary",
-        feature_group: 7,
+        feature_group: 6,
         code: modifySelection
     });
     self.mappings.add("G", {
         annotation: "forward documentboundary",
-        feature_group: 7,
+        feature_group: 6,
         code: function() {
             document.scrollingElement.scrollTop = document.scrollingElement.scrollHeight;
             if (getBrowserName() !== "Firefox") {
@@ -196,7 +196,7 @@ function createVisual(clipboard, hints) {
     });
     self.mappings.add("gg", {
         annotation: "backward documentboundary",
-        feature_group: 7,
+        feature_group: 6,
         code: function() {
             // there may be some fixed-position div for navbar on top on some pages.
             // so scrollIntoView can not send us top, as it's already in view.
@@ -219,7 +219,7 @@ function createVisual(clipboard, hints) {
 
     self.mappings.add("o", {
         annotation: "Go to Other end of highlighted text",
-        feature_group: 7,
+        feature_group: 6,
         code: function() {
             self.hideCursor();
             var pos = [selection.anchorNode, selection.anchorOffset];
@@ -243,38 +243,9 @@ function createVisual(clipboard, hints) {
             selection.modify("extend", "forward", unit);
         }
     }
-    var _yankFunctions = [{}, {
-        annotation: "Yank a word(w) or line(l) or sentence(s) or paragraph(p)",
-        feature_group: 7,
-        code: function(w) {
-            var pos = [selection.focusNode, selection.focusOffset];
-            self.hideCursor();
-            _selectUnit(w);
-            clipboard.write(selection.toString());
-            selection.collapseToStart();
-            selection.setPosition(pos[0], pos[1]);
-            self.showCursor();
-        }
-    }, {
-        annotation: "Copy selected text",
-        feature_group: 7,
-        code: function() {
-            var pos = [selection.focusNode, selection.focusOffset];
-            clipboard.write(selection.toString());
-            if (runtime.conf.modeAfterYank === "Caret") {
-                selection.setPosition(pos[0], pos[1]);
-                self.showCursor();
-                state = 1;
-                _onStateChange();
-            } else if (runtime.conf.modeAfterYank === "Normal") {
-                state = 2;
-                self.toggle();
-            }
-        }
-    }];
     self.mappings.add("*", {
         annotation: "Search word under the cursor",
-        feature_group: 7,
+        feature_group: 6,
         code: function() {
             self.star();
         }
@@ -286,21 +257,21 @@ function createVisual(clipboard, hints) {
     }
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Enter>"), {
         annotation: "Click on node under cursor.",
-        feature_group: 7,
+        feature_group: 6,
         code: function() {
             clickLink(selection.focusNode.parentNode, false);
         }
     });
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Shift-Enter>"), {
         annotation: "Click on node under cursor.",
-        feature_group: 7,
+        feature_group: 6,
         code: function() {
             clickLink(selection.focusNode.parentNode, true);
         }
     });
     self.mappings.add("zt", {
         annotation: "make cursor at top of window.",
-        feature_group: 7,
+        feature_group: 6,
         code: function() {
             var offset = cursor.getBoundingClientRect().top;
             self.hideCursor();
@@ -310,7 +281,7 @@ function createVisual(clipboard, hints) {
     });
     self.mappings.add("zz", {
         annotation: "make cursor at center of window.",
-        feature_group: 7,
+        feature_group: 6,
         code: function() {
             var offset = cursor.getBoundingClientRect().top - window.innerHeight/2;
             self.hideCursor();
@@ -320,7 +291,7 @@ function createVisual(clipboard, hints) {
     });
     self.mappings.add("zb", {
         annotation: "make cursor at bottom of window.",
-        feature_group: 7,
+        feature_group: 6,
         code: function() {
             var offset = window.innerHeight - cursor.getBoundingClientRect().bottom;
             self.hideCursor();
@@ -330,7 +301,7 @@ function createVisual(clipboard, hints) {
     });
     self.mappings.add("f", {
         annotation: "Forward to next char.",
-        feature_group: 7,
+        feature_group: 6,
         code: function() {
             self.statusLine = self.name + " - " + status[state] + " - forward";
             Mode.showStatus();
@@ -339,7 +310,7 @@ function createVisual(clipboard, hints) {
     });
     self.mappings.add("F", {
         annotation: "Backward to next char.",
-        feature_group: 7,
+        feature_group: 6,
         code: function() {
             self.statusLine = self.name + " - " + status[state] + " - backward";
             Mode.showStatus();
@@ -348,7 +319,7 @@ function createVisual(clipboard, hints) {
     });
     self.mappings.add(";", {
         annotation: "Repeat latest f, F",
-        feature_group: 7,
+        feature_group: 6,
         code: function() {
             if (lastF) {
                 visualSeek(lastF[0], lastF[1]);
@@ -357,7 +328,7 @@ function createVisual(clipboard, hints) {
     });
     self.mappings.add(",", {
         annotation: "Repeat latest f, F in opposite direction",
-        feature_group: 7,
+        feature_group: 6,
         code: function() {
             if (lastF) {
                 visualSeek(-lastF[0], lastF[1]);
@@ -367,7 +338,7 @@ function createVisual(clipboard, hints) {
 
     self.mappings.add("p", {
         annotation: "Expand selection to parent element",
-        feature_group: 7,
+        feature_group: 6,
         code: function() {
             var p = selection.focusNode;
             while (p !== document.body) {
@@ -390,7 +361,7 @@ function createVisual(clipboard, hints) {
 
     self.mappings.add("V", {
         annotation: "Select a word(w) or line(l) or sentence(s) or paragraph(p)",
-        feature_group: 7,
+        feature_group: 6,
         code: function(w) {
             self.hideCursor();
             state = 2;
@@ -606,7 +577,6 @@ function createVisual(clipboard, hints) {
     };
 
     function _onStateChange() {
-        self.mappings.add("y", _yankFunctions[state]);
         self.statusLine = self.name + " - " + status[state];
         Mode.showStatus();
     }

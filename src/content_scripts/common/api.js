@@ -20,7 +20,7 @@ import {
     tabOpenLink,
 } from './utils.js';
 
-function createAPI(clipboard, insert, normal, hints, visual, front, browser) {
+function createAPI(insert, normal, hints, visual, front, browser) {
 
     function createKeyTarget(code, ag, repeatIgnore) {
         var keybound = {
@@ -68,7 +68,7 @@ function createAPI(clipboard, insert, normal, hints, visual, front, browser) {
                     p = p.substr(0, p.length - 1);
                 }
             }
-            var keybound = createKeyTarget(jscode, {annotation: annotation, feature_group: ((mode === visual) ? 7 :12)}, options.repeatIgnore);
+            var keybound = createKeyTarget(jscode, {annotation: annotation, feature_group: ((mode === visual) ? 6 :11)}, options.repeatIgnore);
             mode.mappings.add(keys, keybound);
         }
     }
@@ -290,12 +290,6 @@ function createAPI(clipboard, insert, normal, hints, visual, front, browser) {
         unmapAllExcept,
         iunmap,
         vunmap,
-        "clipboard:write": clipboard.write,
-        "clipboard:read": () => {
-            clipboard.read((resp) => {
-                dispatchSKEvent('user', ["onClipboardRead", resp]);
-            });
-        },
         "hints:click": hints.click,
         "hints:create": hints.create,
         "hints:setCharacters": hints.setCharacters,
@@ -348,7 +342,6 @@ function createAPI(clipboard, insert, normal, hints, visual, front, browser) {
         tabOpenLink,
         vmap,
         vmapkey,
-        Clipboard: clipboard,
         Normal: {
             feedkeys: normal.feedkeys,
             jumpVIMark: normal.jumpVIMark,

@@ -53,12 +53,12 @@ function createLurk(normal) {
     self.map_node = self.mappings;
     self.mappings.add(KeyboardUtils.encodeKeystroke("<Alt-i>"), {
         annotation: "Enter normal mode",
-        feature_group: 14,
+        feature_group: 13,
         code: enterNormal
     });
     self.mappings.add("p", {
         annotation: "Enter ephemeral normal mode to temporarily enable SurfingKeys",
-        feature_group: 14,
+        feature_group: 13,
         code: function() {
             enterNormal();
             setTimeout(() => {
@@ -795,14 +795,14 @@ function createNormal(insert) {
 
     self.mappings.add("yG", {
         annotation: "Capture current full page",
-        feature_group: 6,
+        feature_group: 3,
         code: function() {
             self.captureElement(document.scrollingElement);
         }
     });
     self.mappings.add("yS", {
         annotation: "Capture scrolling element",
-        feature_group: 6,
+        feature_group: 3,
         code: function() {
             var scrollNode = document.scrollingElement;
             initScrollIndex();
@@ -926,7 +926,7 @@ function createNormal(insert) {
 
     self.mappings.add("/", {
         annotation: "Find in current page",
-        feature_group: 7,
+        feature_group: 6,
         repeatIgnore: true,
         code: function() {
             dispatchSKEvent("front", ['openFinder']);

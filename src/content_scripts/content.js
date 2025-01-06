@@ -5,7 +5,6 @@ import startScrollNodeObserver from './common/observer.js';
 import createInsert from './common/insert.js';
 import createVisual from './common/visual.js';
 import createHints from './common/hints.js';
-import createClipboard from './common/clipboard.js';
 import {
     applyUserSettings,
     createElementWithContent,
@@ -125,17 +124,16 @@ function applySettings(api, normal, rs) {
 }
 
 function _initModules() {
-    const clipboard = createClipboard();
     const insert = createInsert();
     const normal = createNormal(insert);
     normal.enter();
     startScrollNodeObserver(normal);
     const hints = createHints(insert, normal);
-    const visual = createVisual(clipboard, hints);
+    const visual = createVisual(hints);
     const front = createFront(insert, normal, hints, visual, _browser);
 
-    const api = createAPI(clipboard, insert, normal, hints, visual, front, _browser);
-    createDefaultMappings(api, clipboard, insert, normal, hints, visual, front, _browser);
+    const api = createAPI(insert, normal, hints, visual, front, _browser);
+    createDefaultMappings(api, insert, normal, hints, visual, front, _browser);
     if (typeof(_browser.plugin) === "function") {
         _browser.plugin({ front });
     }

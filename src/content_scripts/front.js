@@ -140,36 +140,6 @@ function createFront(insert, normal, hints, visual, browser) {
         });
     }
 
-    function updateElementBehindEditor(data) {
-        // setEditorText and setValueWithEventDispatched are experimental APIs from Brook Build of Chromium
-        // https://brookhong.github.io/2021/04/18/brook-build-of-chromium.html
-        if (elementBehindEditor.nodeName === "DIV") {
-            if (elementBehindEditor.className === "CodeMirror-code") {
-                window.getSelection().selectAllChildren(elementBehindEditor)
-                let dataTransfer = new DataTransfer()
-                dataTransfer.items.add(data, 'text/plain')
-                elementBehindEditor.dispatchEvent(new ClipboardEvent('paste', {clipboardData: dataTransfer}))
-            } else {
-                data = data.replace(/\n+$/, '');
-
-                if (typeof elementBehindEditor.setEditorText === "function") {
-                    elementBehindEditor.setEditorText(data);
-                } else {
-                    elementBehindEditor.innerText = data;
-                }
-            }
-        } else {
-            if (typeof elementBehindEditor.setValueWithEventDispatched === "function") {
-                elementBehindEditor.setValueWithEventDispatched(data);
-            } else {
-                elementBehindEditor.value = data;
-                var evt = document.createEvent("HTMLEvents");
-                evt.initEvent("change", false, true);
-                elementBehindEditor.dispatchEvent(evt);
-            }
-        }
-    }
-
     var elementBehindEditor;
 
     self.chooseTab = function() {

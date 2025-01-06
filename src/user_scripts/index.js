@@ -61,7 +61,6 @@ function vmap(new_keystroke, old_keystroke, domain, new_annotation) {
 const functionsToListSuggestions = {};
 
 let hintsFunction;
-let onClipboardReadFn;
 let userScriptTask = () => {};
 initSKFunctionListener("user", {
     callUserFunction: (keys, para) => {
@@ -71,9 +70,6 @@ initSKFunctionListener("user", {
     },
     runUserScript: () => {
         userScriptTask();
-    },
-    onClipboardRead: (resp) => {
-        onClipboardReadFn(resp);
     },
     onHintClicked: (element) => {
         if (typeof(hintsFunction) === 'function') {
@@ -110,15 +106,6 @@ const api = {
         dispatchSKEvent('api', ['unmapAllExcept', keystrokes, domain]);
     },
     tabOpenLink,
-    Clipboard: {
-        write: (text) => {
-            dispatchSKEvent('api', ['clipboard:write', text]);
-        },
-        read: (cb) => {
-            onClipboardReadFn = cb;
-            dispatchSKEvent('api', ['clipboard:read']);
-        },
-    },
     Hints: {
         click: (links, force) => {
             if (typeof(links) !== 'string') {

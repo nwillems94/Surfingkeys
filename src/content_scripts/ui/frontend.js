@@ -16,7 +16,6 @@ import {
 import { RUNTIME, runtime } from '../common/runtime.js';
 import KeyboardUtils from '../common/keyboardUtils';
 import Mode from '../common/mode';
-import createClipboard from '../common/clipboard.js';
 import createInsert from '../common/insert.js';
 import createNormal from '../common/normal.js';
 import createVisual from '../common/visual.js';
@@ -25,13 +24,12 @@ import createAPI from '../common/api.js';
 import createDefaultMappings from '../common/default.js';
 
 const Front = (function() {
-    const clipboard = createClipboard();
     Mode.init();
     const insert = createInsert();
     const normal = createNormal(insert);
     normal.enter();
     const hints = createHints(insert, normal);
-    const visual = createVisual(clipboard, hints);
+    const visual = createVisual(hints);
 
     const self = new Mode("Front");
     self._actions = {};
@@ -43,8 +41,8 @@ const Front = (function() {
         Visual: visual,
     };
 
-    const api = createAPI(clipboard, insert, normal, hints, visual, self, {});
-    createDefaultMappings(api, clipboard, insert, normal, hints, visual, self);
+    const api = createAPI(insert, normal, hints, visual, self, {});
+    createDefaultMappings(api, insert, normal, hints, visual, self);
 
     var _actions = self._actions,
         _callbacks = {};
@@ -303,15 +301,14 @@ const Front = (function() {
             'Tabs',                  // 3
             'Page Navigation',       // 4
             'Sessions',              // 5
-            'Clipboard',             // 6
-            'Visual Mode',           // 7
-            'vim-like marks',        // 8
-            'Settings',              // 9
-            'Chrome URLs',           // 10
-            'Proxy',                 // 11
-            'Misc',                  // 12
-            'Insert Mode',           // 13
-            'Lurk Mode',             // 14
+            'Visual Mode',           // 6
+            'vim-like marks',        // 7
+            'Settings',              // 8
+            'Chrome URLs',           // 9
+            'Proxy',                 // 10
+            'Misc',                  // 11
+            'Insert Mode',           // 12
+            'Lurk Mode',             // 13
         ];
 
         initL10n(function(locale) {
@@ -988,11 +985,6 @@ function createAceEditor(normal, front) {
         cm.mode = "normal";
         cm.on('vim-mode-change', function(data) {
             cm.mode = data.mode;
-        });
-        cm.on('0-register-set', function(data) {
-            var lf = document.activeElement;
-            Clipboard.write(data.text);
-            lf.focus();
         });
         var vim = cm.constructor.Vim;
         vim.defineEx("write", "w", function(cm, input) {
