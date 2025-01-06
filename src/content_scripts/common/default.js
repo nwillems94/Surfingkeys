@@ -398,9 +398,6 @@ export default function(api, insert, normal, hints, visual, front, browser) {
         mapkey('ga', '#9Open Chrome About', function() {
             tabOpenLink("chrome://help/");
         });
-        mapkey('gb', '#9Open Chrome Bookmarks', function() {
-            tabOpenLink("chrome://bookmarks/");
-        });
         mapkey('gc', '#9Open Chrome Cache', function() {
             tabOpenLink("chrome://cache/");
         });
@@ -458,9 +455,6 @@ export default function(api, insert, normal, hints, visual, front, browser) {
             RUNTIME('deleteHistoryOlderThan', {
                 days: 30
             });
-        });
-        mapkey(';db', '#11Remove bookmark for current page', function() {
-            RUNTIME('removeBookmark');
         });
     }
 }

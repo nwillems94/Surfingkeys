@@ -107,39 +107,6 @@ function start(browser) {
         interceptedErrors: []
     };
 
-    var bookmarkFolders = [];
-    function getFolders(tree, root) {
-        var cd = root;
-        if (tree.title !== "" && (!tree.hasOwnProperty('url') || tree.url === undefined)) {
-            cd += "/" + tree.title;
-            bookmarkFolders.push({id: tree.id, title: cd + "/"});
-        }
-        if (tree.hasOwnProperty('children')) {
-            for (var i = 0; i < tree.children.length; ++i) {
-                getFolders(tree.children[i], cd);
-            }
-        }
-    }
-
-    function createBookmark(page, onCreated) {
-        if (page.path.length) {
-            chrome.bookmarks.create({
-                'parentId': page.folder,
-                'title': page.path.shift()
-            }, function(newFolder) {
-                page.folder = newFolder.id;
-                createBookmark(page, onCreated);
-            });
-        } else {
-            chrome.bookmarks.create({
-                'parentId': page.folder,
-                'title': page.title,
-                'url': page.url
-            }, function(ret) {
-                onCreated(ret);
-            });
-        }
-    }
 
     function loadSettings(keys, cb) {
         var tmpSet = {
@@ -599,25 +566,6 @@ function start(browser) {
             cb(items);
         });
     }
-    self.getAllURLs = function(message, sender, sendResponse) {
-        chrome.bookmarks.search(message.query || {}, function(bmItems) {
-            var urls = bmItems,
-                requestCount = message.maxResults || 100;
-            var maxResults = requestCount - urls.length;
-            if (maxResults > 0) {
-                _getHistory(message.query || "", maxResults,  function(historyItems) {
-                    urls = urls.concat(historyItems);
-                    _response(message, sendResponse, {
-                        urls: urls
-                    });
-                }, true);
-            } else {
-                _response(message, sendResponse, {
-                    urls: urls.slice(0, requestCount)
-                });
-            }
-        });
-    };
     self.getTabs = function(message, sender, sendResponse) {
         var tab = sender.tab;
         var queryInfo = message.queryInfo || {};
@@ -887,62 +835,6 @@ function start(browser) {
         message.tabs.forEach(function(tab) {
             chrome.tabs.move(tab.id, {windowId, index: -1});
         });
-    };
-    self.getBookmarkFolders = function(message, sender, sendResponse) {
-        chrome.bookmarks.getTree(function(tree) {
-            bookmarkFolders = [];
-            getFolders(tree[0], "");
-            _response(message, sendResponse, {
-                folders: bookmarkFolders
-            });
-        });
-    };
-    self.createBookmark = function(message, sender, sendResponse) {
-        removeBookmark(message.page.url, function() {
-            createBookmark(message.page, function(ret) {
-                _response(message, sendResponse, {
-                    bookmark: ret
-                });
-            });
-        });
-    };
-    function filterBookmarksByQuery(bookmarks, query, caseSensitive) {
-        return bookmarks.filter(function(b) {
-            var title = b.title, url = b.url;
-            if (!caseSensitive) {
-                title = title.toLowerCase();
-                url = url && url.toLowerCase();
-                query = query.toLowerCase();
-            }
-            return title.indexOf(query) !== -1 || (url && url.indexOf(query) !== -1);
-        });
-    }
-    self.getBookmarks = function(message, sender, sendResponse) {
-        if (message.parentId) {
-            chrome.bookmarks.getSubTree(message.parentId, function(tree) {
-                var bookmarks = tree[0].children;
-                if (message.query && message.query.length) {
-                    bookmarks = filterBookmarksByQuery(bookmarks, message.query, message.caseSensitive);
-                }
-                _response(message, sendResponse, {
-                    bookmarks: bookmarks
-                });
-            });
-        } else {
-            if (message.query && message.query.length) {
-                chrome.bookmarks.search(message.query, function(tree) {
-                    _response(message, sendResponse, {
-                        bookmarks: filterBookmarksByQuery(tree, message.query, message.caseSensitive)
-                    });
-                });
-            } else {
-                chrome.bookmarks.getTree(function(tree) {
-                    _response(message, sendResponse, {
-                        bookmarks: tree[0].children
-                    });
-                });
-            }
-        }
     };
     self.getHistory = function(message, sender, sendResponse) {
         _getHistory(message.query || "", message.maxResults || 100, function(tree) {
@@ -1429,49 +1321,6 @@ function start(browser) {
             });
         }
     };
-    function _removeURL(uid, cb) {
-        var type = uid[0], uid = uid.substr(1);
-        if (type === 'B') {
-            chrome.bookmarks.remove(uid, cb);
-        } else if (type === 'H') {
-            chrome.history.deleteUrl({url: uid}, cb);
-        } else if (type === 'T') {
-            uid = uid.split(":").map(function(u) {
-                return parseInt(u);
-            });
-            chrome.windows.update(uid[0], {
-                focused: true
-            }, function() {
-                chrome.tabs.remove(uid[1], cb);
-            });
-        } else if (type === 'M') {
-            loadSettings('marks', function(data) {
-                delete data.marks[uid];
-                _updateAndPostSettings({marks: data.marks}, cb);
-            });
-        }
-    }
-    self.removeURL = function(message, sender, sendResponse) {
-        var removed = 0,
-            totalToRemoved = message.uid.length,
-            uid = message.uid;
-        if (typeof(message.uid) === "string") {
-            totalToRemoved = 1;
-            uid = [ message.uid ];
-        }
-        function _done() {
-            removed ++;
-            if (removed === totalToRemoved) {
-                _response(message, sendResponse, {
-                    response: "Done"
-                });
-            }
-        }
-        uid.forEach(function(u) {
-            _removeURL(u, _done);
-        });
-
-    };
     self.localData = function(message, sender, sendResponse) {
         if (message.data.constructor === Object) {
             chrome.storage.local.set(message.data, function() {
@@ -1515,28 +1364,7 @@ function start(browser) {
         }, function() {
         });
     };
-    function removeBookmark(url, cb) {
-        chrome.bookmarks.search({
-            url: url
-        }, function(bookmarks) {
-            bookmarks.forEach(function(b) {
-                chrome.bookmarks.remove(b.id);
-            });
-            cb && cb();
-        });
-    }
-    self.removeBookmark = function(message, sender, sendResponse) {
-        removeBookmark(sender.tab.url);
-    };
-    self.getBookmark = function(message, sender, sendResponse) {
-        chrome.bookmarks.search({
-            url: sender.tab.url
-        }, function(bookmarks) {
-            _response(message, sendResponse, {
-                bookmarks: bookmarks
-            });
-        });
-    };
+
 
     var _queueURLs = [];
     self.queueURLs = function(message, sender, sendResponse) {

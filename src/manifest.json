@@ -38,7 +38,6 @@
         "nativeMessaging",
         "tabs",
         "history",
-        "bookmarks",
         "scripting",
         "storage",
         "sessions",
