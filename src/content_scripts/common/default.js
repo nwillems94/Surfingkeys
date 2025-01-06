@@ -32,7 +32,7 @@ export default function(api, insert, normal, hints, visual, front, browser) {
     mapkey('?', '#0Show usage', function() {
         front.showUsage();
     });
-    imapkey("<Ctrl-'>", '#12Toggle quotes in an input element', toggleQuote);
+    imapkey("<Ctrl-'>", '#11Toggle quotes in an input element', toggleQuote);
 
     mapkey(";ql", '#0Show last action', function() {
         showPopup(htmlEncode(runtime.conf.lastKeys.map(function(k) {
@@ -361,15 +361,6 @@ export default function(api, insert, normal, hints, visual, front, browser) {
             tabOpenLink("about:blank");
         });
     } else if (bn === "Chrome") {
-        mapkey('cp', '#10Toggle proxy for current site', function() {
-            var host = window.location.host.replace(/:\d+/,'');
-            if (host && host.length) {
-                RUNTIME('updateProxy', {
-                    host: host,
-                    operation: "toggle"
-                });
-            }
-        });
         vmapkey('gr', '#6Read selected text', function() {
             readText(window.getSelection().toString(), {verbose: true});
         });

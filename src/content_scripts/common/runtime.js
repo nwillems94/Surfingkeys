@@ -73,7 +73,6 @@ var runtime = (function() {
             richHintsForKeystroke: 1000,
             scrollStepSize: 70,
             showModeStatus: false,
-            showProxyInStatusBar: false,
             smartPageBoundary: false,
             smoothScroll: true,
             stealFocusOnLoad: true,

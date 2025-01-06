@@ -305,10 +305,9 @@ const Front = (function() {
             'vim-like marks',        // 7
             'Settings',              // 8
             'Chrome URLs',           // 9
-            'Proxy',                 // 10
-            'Misc',                  // 11
-            'Insert Mode',           // 12
-            'Lurk Mode',             // 13
+            'Misc',                  // 10
+            'Insert Mode',           // 11
+            'Lurk Mode',             // 12
         ];
 
         initL10n(function(locale) {

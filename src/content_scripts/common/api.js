@@ -68,7 +68,7 @@ function createAPI(insert, normal, hints, visual, front, browser) {
                     p = p.substr(0, p.length - 1);
                 }
             }
-            var keybound = createKeyTarget(jscode, {annotation: annotation, feature_group: ((mode === visual) ? 6 :11)}, options.repeatIgnore);
+            var keybound = createKeyTarget(jscode, {annotation: annotation, feature_group: ((mode === visual) ? 6 :10)}, options.repeatIgnore);
             mode.mappings.add(keys, keybound);
         }
     }

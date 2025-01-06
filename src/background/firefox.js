@@ -17,8 +17,6 @@ function loadRawSettings(keys, cb, defaultSet) {
     });
 }
 
-function _applyProxySettings(proxyConf) {
-}
 
 function _setNewTabUrl(){
     return "about:newtab";
@@ -41,7 +39,6 @@ function _getContainerName(self, _response) {
 start({
     detectTabTitleChange: true,
     loadRawSettings,
-    _applyProxySettings,
     _setNewTabUrl,
     _getContainerName
 });
