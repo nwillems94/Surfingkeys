@@ -261,21 +261,9 @@ export default function(api, insert, normal, hints, visual, front, browser) {
     mapkey('<Alt-m>', '#3mute/unmute current tab', function() {
         RUNTIME("muteTab");
     });
-    mapkey('B', '#4Go one tab history back', function() {
-        RUNTIME("historyTab", {backward: true});
-    }, {repeatIgnore: true});
-    mapkey('F', '#4Go one tab history forward', function() {
-        RUNTIME("historyTab", {backward: false});
-    }, {repeatIgnore: true});
     mapkey('<Ctrl-6>', '#4Go to last used tab', function() {
         RUNTIME("goToLastTab");
     });
-    mapkey('gT', '#4Go to first activated tab', function() {
-        RUNTIME("historyTab", {index: 0});
-    }, {repeatIgnore: true});
-    mapkey('gt', '#4Go to last activated tab', function() {
-        RUNTIME("historyTab", {index: -1});
-    }, {repeatIgnore: true});
     mapkey('gp', '#4Go to the playing tab', function() {
         RUNTIME('getTabs', { queryInfo: {audible: true}}, response => {
             if (response.tabs?.at(0)) {
@@ -287,12 +275,6 @@ export default function(api, insert, normal, hints, visual, front, browser) {
             }
         })
     }, { repeatIgnore: true });
-    mapkey('S', '#4Go back in history', function() {
-        history.go(-1);
-    }, {repeatIgnore: true});
-    mapkey('D', '#4Go forward in history', function() {
-        history.go(1);
-    }, {repeatIgnore: true});
     mapkey('r', '#4Reload the page', function() {
         RUNTIME("reloadTab", { nocache: false });
     });
@@ -450,11 +432,6 @@ export default function(api, insert, normal, hints, visual, front, browser) {
         });
         mapkey(';j', '#9Close Downloads Shelf', function() {
             RUNTIME("closeDownloadsShelf", {clearHistory: true});
-        });
-        mapkey(';dh', '#11Delete history older than 30 days', function() {
-            RUNTIME('deleteHistoryOlderThan', {
-                days: 30
-            });
         });
     }
 }

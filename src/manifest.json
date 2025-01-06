@@ -37,12 +37,10 @@
     "permissions": [
         "nativeMessaging",
         "tabs",
-        "history",
         "scripting",
         "storage",
         "sessions",
-        "downloads",
-        "topSites"
+        "downloads"
     ],
     "background": {
         "scripts": [

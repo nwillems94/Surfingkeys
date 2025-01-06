@@ -540,32 +540,7 @@ function start(browser) {
             });
         });
     };
-    self.getTopSites = function(message, sender, sendResponse) {
-        if (chrome.topSites) {
-            chrome.topSites.get(function(urls) {
-                urls = _filterByTitleOrUrl(urls, message.query);
-                _response(message, sendResponse, {
-                    urls: urls
-                });
-            });
-        } else {
-            _response(message, sendResponse, {
-                urls: []
-            });
-        }
-    };
 
-
-    function _getHistory(text, maxResults, cb, sortByMostUsed) {
-        browser.getLatestHistoryItem(text, maxResults, (items) => {
-            if (sortByMostUsed) {
-                items = items.sort(function(a, b) {
-                    return b.visitCount - a.visitCount;
-                });
-            }
-            cb(items);
-        });
-    }
     self.getTabs = function(message, sender, sendResponse) {
         var tab = sender.tab;
         var queryInfo = message.queryInfo || {};
@@ -834,18 +809,6 @@ function start(browser) {
         const windowId = sender.tab.windowId;
         message.tabs.forEach(function(tab) {
             chrome.tabs.move(tab.id, {windowId, index: -1});
-        });
-    };
-    self.getHistory = function(message, sender, sendResponse) {
-        _getHistory(message.query || "", message.maxResults || 100, function(tree) {
-            _response(message, sendResponse, {
-                history: tree
-            });
-        }, message.sortByMostUsed);
-    };
-    self.addHistories = function(message, sender, sendResponse) {
-        message.history.forEach(h => {
-            chrome.history.addUrl({url: h});
         });
     };
     function normalizeURL(url) {
@@ -1354,14 +1317,6 @@ function start(browser) {
         };
         chrome.tabs.captureVisibleTab(null, {format: "png"}, function(dataUrl) {
             img.src = dataUrl;
-        });
-    };
-    self.deleteHistoryOlderThan = function(message, sender, sendResponse) {
-        var days = message.days || 0, hours = message.hours || 0;
-        chrome.history.deleteRange({
-            startTime: 0,
-            endTime: new Date().getTime() - (days * 86400 + hours * 3600) * 1000
-        }, function() {
         });
     };
 

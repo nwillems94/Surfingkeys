@@ -38,19 +38,8 @@ function _getContainerName(self, _response) {
     };
 }
 
-function getLatestHistoryItem(text, maxResults, cb) {
-    chrome.history.search({
-        startTime: 0,
-        text,
-        maxResults
-    }, function(items) {
-        cb(items);
-    });
-}
-
 start({
     detectTabTitleChange: true,
-    getLatestHistoryItem,
     loadRawSettings,
     _applyProxySettings,
     _setNewTabUrl,
