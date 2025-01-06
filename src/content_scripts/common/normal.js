@@ -951,15 +951,6 @@ function createNormal(insert) {
     });
 
     function _onMouseUp(event) {
-        if (runtime.conf.mouseSelectToQuery.indexOf(window.origin) !== -1
-            && !isElementClickable(event.target)
-            && !event.target.matches(".cm-matchhighlight")) {
-            // perform inline query after 1 ms
-            // to avoid calling on selection collapse
-            setTimeout(() => {
-                dispatchSKEvent("front", ['querySelectedWord']);
-            }, 1);
-        }
     }
 
     var _disabled = null;

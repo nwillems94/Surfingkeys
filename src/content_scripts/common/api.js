@@ -301,7 +301,6 @@ function createAPI(clipboard, insert, normal, hints, visual, front, browser) {
         "hints:setCharacters": hints.setCharacters,
         "hints:setNumeric": hints.setNumeric,
         "hints:style": hints.style,
-        "front:registerInlineQuery": front.registerInlineQuery,
         "normal:feedkeys": normal.feedkeys,
         "normal:jumpVIMark": normal.jumpVIMark,
         "normal:passThrough": normal.passThrough,
@@ -368,7 +367,6 @@ function createAPI(clipboard, insert, normal, hints, visual, front, browser) {
             style: visual.style,
         },
         Front: {
-            registerInlineQuery: front.registerInlineQuery,
             showBanner,
             showPopup,
         },

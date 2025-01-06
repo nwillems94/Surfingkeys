@@ -81,34 +81,6 @@ function createFront(insert, normal, hints, visual, browser) {
     var _actions = {};
     var skCallbacks = {};
 
-    self.performInlineQueryOnSelection = function(word) {
-        var b = document.getSelection().getRangeAt(0).getClientRects()[0];
-        self.performInlineQuery(word, b, function(pos, queryResult) {
-            if (queryResult) {
-                dispatchSKEvent("front", ['showBubble', {
-                    top: pos.top,
-                    left: pos.left,
-                    height: pos.height,
-                    width: pos.width
-                }, queryResult, false]);
-            }
-        });
-    };
-    function querySelectedWord() {
-        var selection = document.getSelection();
-        var word = selection.toString().trim();
-        if (word && !/[\W_]/.test(word) && word.length && selection.type === "Range") {
-            self.performInlineQueryOnSelection(word);
-        }
-    }
-
-    _actions["updateInlineQuery"] = function (message) {
-        if (message.word) {
-            self.performInlineQueryOnSelection(message.word);
-        } else {
-            querySelectedWord();
-        }
-    };
 
     self.executeCommand = function (cmd) {
         self.command({
@@ -210,66 +182,6 @@ function createFront(insert, normal, hints, visual, browser) {
         }
     };
 
-
-    var _inlineQuery = false;
-    var _showQueryResult;
-    self.performInlineQuery = function (query, pos, showQueryResult) {
-        if (document.dictEnabled !== undefined) {
-            if (window.location.href.startsWith("chrome://dictorium-query/")) {
-                if (window === top) {
-                    window.location.href = `chrome://dictorium-query/${query}`;
-                } else {
-                    window.postMessage({dictorium_data: { type: 'DictoriumReload', word: query }});
-                }
-            } else {
-                window.postMessage({dictorium_data: {
-                    type: "OpenDictoriumQuery",
-                    word: query,
-                    sentence: "",
-                    pos: pos,
-                    source: window.location.href
-                }});
-            }
-            hidePopup();
-        } else if (_inlineQuery) {
-            if (runtime.conf.autoSpeakOnInlineQuery) {
-                browser.readText(query);
-            }
-            query = query.toLocaleLowerCase();
-            runtime.updateHistory('OmniQuery', query);
-
-            const callbackId = generateQuickGuid();
-            skCallbacks[callbackId] = (res) => {
-                showQueryResult(pos, res);
-            };
-            dispatchSKEvent('user', ["performInlineQuery", query, callbackId]);
-        } else if (isInUIFrame()) {
-            _showQueryResult = function(result) {
-                showQueryResult(pos, result);
-            };
-            document.getElementById("proxyFrame").contentWindow.postMessage({surfingkeys_content_data: {
-                action: "performInlineQuery",
-                pos: pos,
-                query: query
-            }}, "*");
-        } else {
-            tabOpenLink("https://github.com/brookhong/Surfingkeys/wiki/Register-inline-query");
-            hidePopup();
-        }
-    };
-
-    /**
-     * Register an inline query.
-     *
-     * @param {object} args `url`: string or function, the dictionary service url or a function to return the dictionary service url, `parseResult`: function, a function to parse result from dictionary service and return a HTML string to render explanation, `headers`: object[optional], in case your dictionary service needs authentication.
-     * @name Front.registerInlineQuery
-     *
-     * @see [example](https://github.com/brookhong/Surfingkeys/wiki/Register-inline-query).
-     */
-    self.registerInlineQuery = function() {
-        _inlineQuery = true;
-    };
-
     var _keyHints = {
         accumulated: "",
         candidates: {},
@@ -319,7 +231,6 @@ function createFront(insert, normal, hints, visual, browser) {
             }
             dispatchSKEvent('settingsFromSnippetsLoaded');
         },
-        querySelectedWord,
         addMapkey: (mode, new_keystroke, old_keystroke) => {
             applyUICommand({
                 action: 'addMapkey',
@@ -518,17 +429,7 @@ function createFront(insert, normal, hints, visual, browser) {
         if (_message === undefined) {
             return;
         }
-        if (_message.action === "performInlineQuery") {
-            self.performInlineQuery(_message.query, _message.pos, function (pos, queryResult) {
-                event.source.postMessage({surfingkeys_content_data: {
-                    action: "performInlineQueryResult",
-                    pos: pos,
-                    result: queryResult
-                }}, event.origin);
-            });
-        } else if (_message.action === "performInlineQueryResult") {
-            _showQueryResult(_message.pos, _message.result);
-        } else if (_active) {
+        if (_active) {
             if (_callbacks[_message.id]) {
                 var f = _callbacks[_message.id];
                 // returns true to make callback stay for coming response.

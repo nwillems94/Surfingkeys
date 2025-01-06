@@ -614,11 +614,6 @@ const Front = (function() {
 
 
     function onResize() {
-        if (_bubble.style.display !== "none") {
-            self.contentCommand({
-                action: 'updateInlineQuery'
-            });
-        }
     }
 
     // for mouseSelectToQuery
@@ -632,14 +627,6 @@ const Front = (function() {
             window.removeEventListener("resize", onResize);
         } else {
             var sel = window.getSelection().toString().trim() || getWordUnderCursor(true);
-            if (sel && sel.length > 0) {
-                self.contentCommand({
-                    action: 'updateInlineQuery',
-                    word: sel
-                }, function() {
-                    window.addEventListener("resize", onResize);
-                });
-            }
         }
     };
 

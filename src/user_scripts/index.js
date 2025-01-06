@@ -60,7 +60,6 @@ function vmap(new_keystroke, old_keystroke, domain, new_annotation) {
 
 const functionsToListSuggestions = {};
 
-let inlineQuery;
 let hintsFunction;
 let onClipboardReadFn;
 let userScriptTask = () => {};
@@ -69,19 +68,6 @@ initSKFunctionListener("user", {
         if (userDefinedFunctions.hasOwnProperty(keys)) {
             userDefinedFunctions[keys](para);
         }
-    },
-    performInlineQuery: (query, callbackId, origin) => {
-        const url = (typeof(inlineQuery.url) === "function") ? inlineQuery.url(query) : inlineQuery.url + query;
-        httpRequest({
-            url,
-            headers: inlineQuery.headers
-        }, function(res) {
-            if (res.error) {
-                dispatchSKEvent("front", [callbackId, `${res.error} on ${url}`]);
-            } else {
-                dispatchSKEvent("front", [callbackId, inlineQuery.parseResult(res)]);
-            }
-        });
     },
     runUserScript: () => {
         userScriptTask();
@@ -190,10 +176,6 @@ const api = {
         },
     },
     Front: {
-        registerInlineQuery: (args) => {
-            inlineQuery = args;
-            dispatchSKEvent('api', ['front:registerInlineQuery']);
-        },
         showBanner,
         showPopup
     },

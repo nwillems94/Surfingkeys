@@ -190,20 +190,6 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
         hints.create(normal.refreshScrollableElements(), hints.dispatchMouseClick);
     });
 
-    vmapkey("q", '#7Translate word under cursor', function() {
-        var w = getWordUnderCursor();
-        browser.readText(w);
-        var b = visual.getCursorPixelPos();
-        front.performInlineQuery(w, {
-            top: b.top,
-            left: b.left,
-            height: b.height,
-            width: b.width
-        }, function(pos, queryResult) {
-            dispatchSKEvent("front", ['showBubble', pos, queryResult, true]);
-        });
-    });
-
     function getSentence(textNode, offset) {
         var sentence = "";
 
@@ -219,22 +205,6 @@ export default function(api, clipboard, insert, normal, hints, visual, front, br
         return sentence.replace(/\n/g, '');
     }
 
-    mapkey("cq", '#6Query word with Hints', function() {
-        hints.create(runtime.conf.textAnchorPat, function (element) {
-            var word = element[2].trim().replace(/[^A-z].*$/, "");
-            var b = getTextNodePos(element[0], element[1], element[2].length);
-            front.performInlineQuery(word, {
-                top: b.top,
-                left: b.left,
-                height: b.height,
-                width: b.width
-            }, function (pos, queryResult) {
-                dispatchSKEvent("front", ['showBubble', pos, queryResult, false]);
-            });
-        });
-    });
-
-    
     mapkey('g0', '#3Go to the first tab', function() {
         normal.feedkeys('99E');
     });
