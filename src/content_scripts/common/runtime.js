@@ -62,6 +62,7 @@ var runtime = (function() {
             hintAlign: "center",
             hintExplicit: false,
             hintShiftNonActive: true,
+            hintIncognitoKey: "N",
             historyMUOrder: true,
             language: undefined,
             lastQuery: "",

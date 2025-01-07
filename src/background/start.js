@@ -820,20 +820,24 @@ function start(browser) {
                     break;
             }
         }
-        chrome.tabs.create({
-            url: url,
-            active: message.tab.active,
-            index: newTabPosition,
-            pinned: message.tab.pinned,
-            openerTabId: currentTab.id
-        }, function(tab) {
-            if (message.scrollLeft || message.scrollTop) {
-                tabMessages[tab.id] = {
-                    scrollLeft: message.scrollLeft,
-                    scrollTop: message.scrollTop
-                };
-            }
-        });
+        if (message.tab.incognito) {
+            chrome.windows.create({"url": url, "incognito": true, state: "maximized"})
+        } else {
+            chrome.tabs.create({
+                url: url,
+                active: message.tab.active,
+                index: newTabPosition,
+                pinned: message.tab.pinned,
+                openerTabId: currentTab.id
+            }, function(tab) {
+                if (message.scrollLeft || message.scrollTop) {
+                    tabMessages[tab.id] = {
+                        scrollLeft: message.scrollLeft,
+                        scrollTop: message.scrollTop
+                    };
+                }
+            });
+        }
     }
 
     self.openLink = function(message, sender, sendResponse) {

@@ -157,6 +157,8 @@ div.hint-scrollable {
                         if (normal.isScrollKeyInHints(key) && excludedScrollKeys.indexOf(key) === -1) {
                             // pass on the key to normal mode to scroll page.
                             event.sk_stopPropagation = false;
+                        } else if (key === runtime.conf.hintIncognitoKey) {
+                            incognito = true;
                         } else {
                             // quit hints if user presses non-hint key and no keys for scrolling
                             hide();
@@ -217,7 +219,8 @@ div.hint-scrollable {
                     RUNTIME("openLink", {
                         tab: {
                             tabbed: tabbed,
-                            active: active
+                            active: active,
+                            incognito: incognito
                         },
                         url: getHref(element)
                     });
@@ -244,7 +247,8 @@ div.hint-scrollable {
             mouseEvents: MOUSE_EVENTS
         },
         holder = createElementWithContent('section', '', {style: "display: block; opacity: 1;"}),
-        shiftKey = false;
+        shiftKey = false,
+        incognito = false;
     var _lastCreateAttrs = {},
         _onHintKey = self.dispatchMouseClick,
         _cssSelector = "";
