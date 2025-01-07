@@ -111,58 +111,33 @@ function createVisual(hints) {
     self.mappings = new Trie();
     self.map_node = self.mappings;
     self.repeats = "";
-    self.mappings.add("l", {
+    self.mappings.add(KeyboardUtils.encodeKeystroke("<ArrowRight>"), {
         annotation: "forward character",
         feature_group: 6,
         code: modifySelection
     });
-    self.mappings.add("h", {
+    self.mappings.add(KeyboardUtils.encodeKeystroke("<ArrowLeft>"), {
         annotation: "backward character",
         feature_group: 6,
         code: modifySelection
     });
-    self.mappings.add("j", {
+    self.mappings.add(KeyboardUtils.encodeKeystroke("<ArrowDown>"), {
         annotation: "forward line",
         feature_group: 6,
         code: modifySelection
     });
-    self.mappings.add("k", {
+    self.mappings.add(KeyboardUtils.encodeKeystroke("<ArrowUp>"), {
         annotation: "backward line",
         feature_group: 6,
         code: modifySelection
     });
-    self.mappings.add("w", {
+    self.mappings.add(KeyboardUtils.encodeKeystroke("<Ctrl-ArrowRight>"), {
         annotation: "forward word",
         feature_group: 6,
         code: modifySelection
     });
-    self.mappings.add("e", {
-        annotation: "forward word",
-        feature_group: 6,
-        code: modifySelection
-    });
-    self.mappings.add("b", {
+    self.mappings.add(KeyboardUtils.encodeKeystroke("<Ctrl-ArrowLeft>"), {
         annotation: "backward word",
-        feature_group: 6,
-        code: modifySelection
-    });
-    self.mappings.add(")", {
-        annotation: "forward sentence",
-        feature_group: 6,
-        code: modifySelection
-    });
-    self.mappings.add("(", {
-        annotation: "backward sentence",
-        feature_group: 6,
-        code: modifySelection
-    });
-    self.mappings.add("}", {
-        annotation: "forward paragraphboundary",
-        feature_group: 6,
-        code: modifySelection
-    });
-    self.mappings.add("{", {
-        annotation: "backward paragraphboundary",
         feature_group: 6,
         code: modifySelection
     });
@@ -297,42 +272,6 @@ function createVisual(hints) {
             self.hideCursor();
             document.scrollingElement.scrollTop -= offset;
             self.showCursor();
-        }
-    });
-    self.mappings.add("f", {
-        annotation: "Forward to next char.",
-        feature_group: 6,
-        code: function() {
-            self.statusLine = self.name + " - " + status[state] + " - forward";
-            Mode.showStatus();
-            visualf = 1;
-        }
-    });
-    self.mappings.add("F", {
-        annotation: "Backward to next char.",
-        feature_group: 6,
-        code: function() {
-            self.statusLine = self.name + " - " + status[state] + " - backward";
-            Mode.showStatus();
-            visualf = -1;
-        }
-    });
-    self.mappings.add(";", {
-        annotation: "Repeat latest f, F",
-        feature_group: 6,
-        code: function() {
-            if (lastF) {
-                visualSeek(lastF[0], lastF[1]);
-            }
-        }
-    });
-    self.mappings.add(",", {
-        annotation: "Repeat latest f, F in opposite direction",
-        feature_group: 6,
-        code: function() {
-            if (lastF) {
-                visualSeek(-lastF[0], lastF[1]);
-            }
         }
     });
 

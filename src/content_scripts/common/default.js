@@ -189,21 +189,6 @@ export default function(api, insert, normal, hints, visual, front, browser) {
     mapkey('g$', '#3Go to the first tab', function() {
             normal.feedkeys('99R');
     });
-    mapkey('zr', '#3zoom reset', function() {
-        RUNTIME('setZoom', {
-            zoomFactor: 0
-        });
-    });
-    mapkey('zi', '#3zoom in', function() {
-        RUNTIME('setZoom', {
-            zoomFactor: 0.1
-        });
-    });
-    mapkey('zo', '#3zoom out', function() {
-        RUNTIME('setZoom', {
-            zoomFactor: -0.1
-        });
-    });
 
     mapkey('ZZ', '#5Save session and quit', function() {
         RUNTIME('createSession', {
@@ -333,10 +318,10 @@ export default function(api, insert, normal, hints, visual, front, browser) {
     mapkey('gU', '#4Go to root of current URL hierarchy', function() {
         window.location.href = window.location.origin;
     });
-    mapkey('gxt', '#3Close tab on left', function() {
+    mapkey('gxE', '#3Close tab on left', function() {
         RUNTIME("closeTabLeft");
     });
-    mapkey('gxT', '#3Close tab on right', function() {
+    mapkey('gxR', '#3Close tab on right', function() {
         RUNTIME("closeTabRight");
     });
     mapkey('gx0', '#3Close all tabs on left', function() {

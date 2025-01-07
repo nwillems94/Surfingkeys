@@ -103,8 +103,9 @@ body {
     vertical-align: top;
 }
 #sk_usage .kbd-span {
-    width: 80px;
+    width: 120px;
     text-align: right;
+    vertical-align: top;
     display: inline-block;
 }
 #sk_usage .feature_name {
@@ -115,8 +116,10 @@ body {
     border-bottom: 2px solid #888;
 }
 #sk_usage span.annotation {
+    width: 210px;
     padding-left: 32px;
     line-height: 22px;
+    display: inline-block;
 }
 #sk_usage * {
     font-size: 10pt;

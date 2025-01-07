@@ -61,7 +61,7 @@ var runtime = (function() {
             focusOnSaved: true,
             hintAlign: "center",
             hintExplicit: false,
-            hintShiftNonActive: false,
+            hintShiftNonActive: true,
             historyMUOrder: true,
             language: undefined,
             lastQuery: "",
