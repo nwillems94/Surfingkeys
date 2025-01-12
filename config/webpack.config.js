@@ -48,7 +48,6 @@ function modifyManifest(browser, mode, buffer) {
                     "api.js",
                     "pages/neovim.html",
                     "pages/default.js",
-                    "pages/emoji.tsv",
                     "pages/frontend.html",
                     "pages/shadow.css",
                     "pages/default.css"

@@ -71,7 +71,6 @@
     "web_accessible_resources": [
         "pages/neovim.html",
         "pages/default.js",
-        "pages/emoji.tsv",
         "pages/frontend.html",
         "pages/shadow.css",
         "pages/default.css"
